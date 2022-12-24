@@ -13,7 +13,7 @@ app.config['DEBUG'] = True
 def status():
     data = {
         "status": "OK",
-		"version": API_VERSION
+        "version": API_VERSION
     }
     return app.response_class(
         response=json.dumps(data),
