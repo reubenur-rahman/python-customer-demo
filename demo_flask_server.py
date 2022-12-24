@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # (C) Copyright 2022 Reubenur Rahman
 
 import json
