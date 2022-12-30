@@ -3,7 +3,7 @@ Description="demo-server"
 After=network.target
 
 [Service]
-User=glcgadmin
+User=cstadmin2
 WorkingDirectory=/opt/deployments
 ExecStart=/usr/bin/python demo_flask_server.py 
 Restart=on-failure
