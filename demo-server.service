@@ -1,0 +1,12 @@
+[Unit]
+Description="demo-server"
+After=network.target
+
+[Service]
+User=glcgadmin
+WorkingDirectory=/opt/deployments
+ExecStart=/usr/bin/python demo_flask_server.py 
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
