@@ -1,0 +1,14 @@
+name: Publish tags to CMP deployment versions
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: REST API with curl
+      run: |
+        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/deployments/2/versions" -d '{"version": {"userVersion": "${{ github.ref_name }}", "deployType": "git", "gitUrl": "https://github.com/reubenur-rahman/python-customer-demo", "gitRef": "${{ github.ref_name }}"}}'
