@@ -9,6 +9,13 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - name: REST API with curl
+    - name: Install JQ
+      run: sudo apt install jq -y
+    - name: Create a new deployment version
+      id: version-id
       run: |
-        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/deployments/2/versions" -d '{"version": {"userVersion": "${{ github.ref_name }}", "deployType": "git", "gitUrl": "https://github.com/reubenur-rahman/python-customer-demo", "gitRef": "${{ github.ref_name }}"}}'
+        versionID=$(curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/deployments/${{secrets.DEPLOYMENT_VERSION}}/versions" -d '{"version": {"userVersion": "${{ github.ref_name }}", "deployType": "git", "gitUrl": "https://github.com/reubenur-rahman/python-customer-demo", "gitRef": "${{ github.ref_name }}"}}' | jq '.version.id')
+        echo "VERSION_ID=$versionID" >> $GITHUB_OUTPUT
+    - name: Deploy version in all instances
+      run: |
+        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/instances/${{secrets.INSTANCE_ID}}/deploy" -d '{"appDeploy": {"instance": "${{secrets.INSTANCE_ID}}","deployment": "${{secrets.DEPLOYMENT_VERSION}}","version": "${{ steps.version-id.VERSION_ID}}"}}'
