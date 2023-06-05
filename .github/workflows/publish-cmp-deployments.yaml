@@ -21,5 +21,5 @@ jobs:
       run: echo "VERSION_ID=$(cat /tmp/versionId.txt)" >> $GITHUB_OUTPUT
     - name: Deploy version in all instances
       run: |
-        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/instances/2478/deploy" -d '{"appDeploy": {"instance": 2478,"deployment": 2,"version": "${{steps.version-id.VERSION_ID}}"}}'
+        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/instances/2478/deploy" -d '{"appDeploy": {"instance": 2478,"deployment": 2,"version": "${{ github.ref_name }}"}}'
         
