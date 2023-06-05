@@ -11,11 +11,7 @@ jobs:
     steps:
     - name: Install JQ
       run: sudo apt install jq -y
-    #- name: Create a new deployment version
-    #  id: version-id
-    #  run: |
-    #    versionID=$(curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/deployments/${{vars.DEPLOYMENT_VERSION}}/versions" -d '{"version": {"userVersion": "${{ github.ref_name }}", "deployType": "git", "gitUrl": "https://github.com/reubenur-rahman/python-customer-demo", "gitRef": "${{ github.ref_name }}"}}' | jq '.version.id')
-    #    echo "VERSION_ID=$versionID" >> $GITHUB_OUTPUT
     - name: Deploy version in all instances
       run: |
-        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/instances/${{vars.INSTANCE_ID}}/deploy" -d '{"appDeploy": {"instance": "${{vars.INSTANCE_ID}}","deployment": "${{vars.DEPLOYMENT_VERSION}}","version": "34"}}'
+        curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/instances/${{env.DEPLOYMENT_TEST.INSTANCE_ID}}/deploy" -d '{"appDeploy": {"instance": "${{env.DEPLOYMENT_TEST.INSTANCE_ID}}","deployment": "${{env.DEPLOYMENT_TEST.DEPLOYMENT_VERSION}}","version": "34"}}'
+        
