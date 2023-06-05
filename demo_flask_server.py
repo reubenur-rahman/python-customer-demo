@@ -4,7 +4,7 @@
 import json
 from flask import Flask
 
-API_VERSION = 'v7'
+API_VERSION = 'v8'
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
