@@ -1,12 +1,13 @@
 name: Publish tags to CMP deployment versions
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+  #push:
+  #  tags:
+  #    - '*'
 
 jobs:
-  publish:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Install JQ
