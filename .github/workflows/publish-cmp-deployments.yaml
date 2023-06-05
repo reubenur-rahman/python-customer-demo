@@ -13,10 +13,12 @@ jobs:
     - name: Install JQ
       run: sudo apt install jq -y
     - name: Create a new deployment version
-      id: version-id
       run: |
         versionID=$(curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/deployments/${{vars.DEPLOYMENT_VERSION}}/versions" -d '{"version": {"userVersion": "${{ github.ref_name }}", "deployType": "git", "gitUrl": "https://github.com/reubenur-rahman/python-customer-demo", "gitRef": "${{ github.ref_name }}"}}' | jq '.version.id')
-        echo "VERSION_ID=$versionID" >> $GITHUB_OUTPUT
+        echo "$versionID" > /tmp/versionId.txt
+    - name: Set version ID
+      id: version-id
+      run: echo "VERSION_ID=$(cat /tmp/versionId.txt)" >> $GITHUB_OUTPUT
     - name: Deploy version in all instances
       run: |
         curl -k -H "Content-Type: application/json" -H "Authorization: Bearer ${{secrets.CMP_TOKEN}}" -X POST "${{secrets.CMP_URL}}/api/instances/2478/deploy" -d '{"appDeploy": {"instance": 2478,"deployment": 2,"version": "${{steps.version-id.VERSION_ID}}"}}'
